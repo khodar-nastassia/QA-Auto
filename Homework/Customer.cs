@@ -8,21 +8,17 @@ namespace Homework
 {
     internal class Customer
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public Adress Adress { get; set; }
+        public string FirstName { get; private set; }
+        public string LastName { get; private set; }
+        public Address Address { get; set; }
         public int PhoneNumber { get; set; }
-
-        public Customer(string firstname, string lastname, Adress adress, int phonenumber)
+        public Customer(string firstName, string lastName, Address address, int phoneNumber)
         {
-            FirstName = firstname;
-            LastName = lastname;
-            Adress = adress;
-            PhoneNumber = phonenumber;
-        }
-        public override string ToString()
-        {
-            return FirstName + " " + LastName + "," + Adress + ", " + PhoneNumber;
+            FirstName = firstName;
+            LastName = lastName;
+            Address = address;
+            PhoneNumber = phoneNumber;
         }
     }
+    
 }

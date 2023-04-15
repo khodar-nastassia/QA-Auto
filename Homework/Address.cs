@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Homework
 {
-    internal class Adress
+    internal class Address
     {
         public string State { get; set;}
         public string City { get; set; }
@@ -14,7 +14,7 @@ namespace Homework
         public int HouseNumber { get; set; }
         public int FlatNumber { get; set; }
 
-        public Adress(string state, string city, string street, int house, int flat)
+        public Address(string state, string city, string street, int house, int flat)
         {
             State = state;
             City = city;
