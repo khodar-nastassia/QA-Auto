@@ -12,23 +12,19 @@ namespace Homework.PaymentCards
         public float CashBackCardBalance { get; private set; }
 
         public CashBackCard(long cardNumber, ValidDate validDate, Customer cardHolder, int cardCCV, float cashBackCardPercent, float cashBackCardBalance):base (cardNumber,validDate,cardHolder,cardCCV) 
-        {
-            
+        {            
             CashBackCardBalance = cashBackCardBalance;
             CashBackCardPercent = cashBackCardPercent;
         }
 
-
         public override string ToString()
         {
             return "CashBackCardPercent = " + CashBackCardPercent + ", CashBackCardBalance = " + CashBackCardBalance;
-
         }
         public string GetFullInformation()
         {
             return string.Format("CashBackCardNumber:{0}, CardValidity:{1}, CashBackCardHolder: {2}, CCV: {3}, CashBackCardPercent: {4}, CashBackCardBalance: {5} ", CardNumber, ValidDate, CardHolder, CardCCV, CashBackCardPercent, CashBackCardBalance);
         }
-
         public override bool CheckBalanceSufficiency(float amount)
         {
             if (CashBackCardBalance >= amount)
@@ -43,12 +39,10 @@ namespace Homework.PaymentCards
             CashBackCardBalance += amount * CashBackCardPercent / 100;
             return CashBackCardBalance;
         }
-
         public override float TopUp(float amount)
         {
             CashBackCardBalance += amount;
             return CashBackCardBalance;
-
         }
         public override float GetBalance()
         {

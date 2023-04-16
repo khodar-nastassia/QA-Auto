@@ -10,7 +10,6 @@ namespace Homework.PaymentMeans
     {
         public float BitCoinBalance { get; private set; }
         public BitCoin BitCoinHash { get; private set; }
-
         public BitCoin(float bitCoinBalance)
         {
             BitCoinBalance = bitCoinBalance;
@@ -28,12 +27,10 @@ namespace Homework.PaymentMeans
             BitCoinBalance -= amount;
             return BitCoinBalance;
         }
-
         public float TopUp(float amount)
         {
             BitCoinBalance += amount;
             return BitCoinBalance;
-
         }
         public float GetBalance()
         {

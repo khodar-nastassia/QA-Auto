@@ -21,7 +21,6 @@ namespace Homework
             Street = street;
             HouseNumber = house;
             FlatNumber = flat;
-
         }
         public override string ToString()
         {

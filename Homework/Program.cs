@@ -8,8 +8,22 @@ namespace Homework
 
         static void Main(string[] args)
         {
-            
-            
+            //Task1
+            //1.Создать интерфейс IPayment c двумя методами- MakePayment(float amount), и TopUp(float amount) 
+            //2.Реализовать интерфейс в классах Cash, DebetCard, CreditCard, CashBackCard, BitCoin (начинка классов и реализация интерфейсов на ваше усмотрение - в зависимости от типа реальной карты(Debet, Credit, CashBack) реализовать MakePayment - снимать деньги с текущего счета, с использованием кредита и т.д)
+            //3.Создать класс BankClient, c данными клиента(имя, фамилия, адрес), и списком платежных средств. 
+            //4.Для BankClient создать метод bool Pay(float), который реализован следующим образом-для списка платежных средств осуществляется попытка платежа-сначала наличными, если не получилось - картами CashBaсk, далее дебетовыми, кредитными и в крайнем случае биткойнами.Из метода возвращается значение успеха платежа.
+            //5.Совершить несколько платежей на различные суммы, и после этого вывести остаток по всем платежным средствам клиента.
+
+            //Task2
+            //1. Создать и заполнить коллекцию BankClient (List), у каждого клиента должно быть несколько платежных средств
+            //2.Отсортировать коллекцию несколькими способами с использованием метода Sort и реализаций интерфейса  ICompararer
+            //2.1.По имени клиента
+            //2.2 По адресу клиента
+            //2.3 По количеству пластиковых карточек
+            //2.4 По общему количеству имеющихся денег(на всех платежных средствах)
+            //2.5 По максимальному количеству денег на одном платежном средстве
+
             //Create Valid Date   
             ValidDate date1 = new ValidDate(25, 01);
             ValidDate date2 = new ValidDate(25, 02);
@@ -55,31 +69,48 @@ namespace Homework
             CreditCard creditCard1 = new CreditCard(5123456789000000, date5, customer5, 555, 5F, 5999F);
             CreditCard creditCard2 = new CreditCard(5123456789000000, date6, customer6, 666, 6F, 6999F);
 
-            //Create wallets with different payment means
-            List<IPayment> wallet1 = new List<IPayment>{ bitCoin1, banknote5, debetCard1, creditCard1,creditCard2, cashBackCard1 };
-            //List<IPayment> wallet2 = new List<IPayment> { bitCoin2, banknote10, debetCard2, cashBackCard1, cashBackCard2 };
+            List<IPayment> paymentMeans1 = new List<IPayment> { bitCoin1, banknote5, debetCard1, creditCard1, creditCard2, cashBackCard1 };
+            List<IPayment> paymentMeans2 = new List<IPayment> { bitCoin2, banknote10, debetCard2, creditCard2, cashBackCard2 };
+            List<IPayment> paymentMeans3 = new List<IPayment> { banknote50, debetCard1, creditCard1, cashBackCard1 };
+            List<IPayment> paymentMeans4 = new List<IPayment> { bitCoin1, debetCard2, cashBackCard2 };
 
             //Create BankClient
-            BankClient client1 = new BankClient(wallet1);
-            //BankClient client2 = new BankClient(wallet2);
-            
-            client1.Pay(10f);
-            client1.Pay(100f);
-            client1.Pay(2000f);
-        
-            
-            foreach (IPayment p in wallet1)
+            BankClient client1 = new BankClient(customer1, paymentMeans1);
+            BankClient client2 = new BankClient(customer2, paymentMeans2);
+            BankClient client3 = new BankClient(customer3, paymentMeans3);
+            BankClient client4 = new BankClient(customer4, paymentMeans4);
+
+            List<BankClient> bankClients = new List<BankClient> { client1, client2, client3, client4 };
+
+            // Вывод Customer.LastName and TotalBalance
+            foreach (BankClient item in bankClients)
             {
-                Console.WriteLine(p.GetBalance());
+                Console.WriteLine(item.Customer.LastName + "=" +item.GetAllMoney(item));
             }
 
-
+            Analitics analitik1 = new Analitics(bankClients);
             
-
-
-
-
-
+            //sort by TotalBalance
+            analitik1.AnalisysBankClients("TotalBalance");
+            
+            // after sort
+            foreach (BankClient item in bankClients)
+            {
+                Console.WriteLine(item.Customer.LastName + "=" + item.GetAllMoney(item));
+            }
+            
+            // Make payment
+            client1.Pay(10f);
+            client2.Pay(100f);
+            client3.Pay(2000f);
+            
+            //sort after pay
+            analitik1.AnalisysBankClients("TotalBalance");
+            
+            foreach (BankClient item in bankClients)
+            {
+                Console.WriteLine(item.Customer.LastName + "=" + item.GetAllMoney(item));
+            }
         }
     }
 }

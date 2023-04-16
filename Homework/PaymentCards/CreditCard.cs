@@ -12,24 +12,19 @@ namespace Homework.PaymentCards
         public float CreditCardPercent { get; private set; }
         public float CreditCardLimit { get; private set; }
 
-
         public CreditCard(long cardNumber, ValidDate validDate, Customer cardHolder, int cardCCV, float creditCardPercent, float creditCardLimit):base(cardNumber, validDate, cardHolder, cardCCV)
         {            
             CreditCardPercent = creditCardPercent;
             CreditCardLimit = creditCardLimit;
         }
-
         public override string ToString()
         {
             return "CreditCardPercent = " + CreditCardPercent + ", CreditCarDLimit = " + CreditCardLimit;
-
         }
         public string GetFullInformation()
         {
             return string.Format("CreditCardNumber:{0}, CardValidity:{1}, CreditCardHolder: {2}, CCV: {3}, CreditCardPercent: {4}, CreditCardLimit: {5}", CardNumber, ValidDate, CardHolder, CardCCV, CreditCardPercent, CreditCardLimit);
         }
-
-
         public override bool CheckBalanceSufficiency(float amount)
         {
             if (CreditCardLimit >= amount)
@@ -44,7 +39,6 @@ namespace Homework.PaymentCards
             CreditCardLimit -= amount * CreditCardPercent / 100;
             return CreditCardLimit;
         }
-
         public override float TopUp(float amount)
         {
             CreditCardLimit -= amount;
@@ -54,8 +48,5 @@ namespace Homework.PaymentCards
         {
             return CreditCardLimit;
         }
-
-
-
     }
 }

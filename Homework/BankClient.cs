@@ -6,23 +6,49 @@ using System.Text;
 using System.Threading.Tasks;
 using Homework.PaymentCards;
 using Homework.PaymentMeans;
+using Homework.Comparer;
 
 namespace Homework
 {
     internal class BankClient
     {
+        public Customer Customer { get; set; }
         public string ClientInfo { get; set; }
-       
-        private List<IPayment> PaymentMeans { get; set; } 
-        public BankClient(List<IPayment> paymentMeans)
+        public List<IPayment> PaymentMeans { get; set; }        
+        public BankClient(Customer customer, List<IPayment> paymentMeans)
         {
-            PaymentMeans = paymentMeans;           
+            Customer = customer;
+            PaymentMeans = paymentMeans;
         }
         public bool AddPaymentMean(IPayment mean)
         {
             PaymentMeans.Add(mean);
             return true;
+        }        
+        public float GetAllMoney( BankClient client)
+        {
+            float allMoney = 0;
+            foreach (var item in PaymentMeans)               
+            {
+                item.GetBalance();
+                allMoney += item.GetBalance();
+            }
+            return allMoney;           
         }
+        public float GetMaxBalance(BankClient client)
+        {
+            float maxBalance = 0;
+            foreach (var item in PaymentMeans)
+            {
+                if (item.GetBalance() > maxBalance)
+                {
+                    maxBalance = item.GetBalance();
+                }                
+            }
+            return maxBalance;
+        }
+
+        
 
         public bool Pay(float amount)
         {
@@ -36,9 +62,9 @@ namespace Homework
                     float test = item.GetBalance();
                     //Console.WriteLine("pay by cash");
                     return true;
-
                 }
             }
+
             List<IPayment> cashBackCard = PaymentMeans.Where(x => x is CashBackCard).ToList();
 
             foreach (IPayment item in cashBackCard)
@@ -61,6 +87,7 @@ namespace Homework
                     return true;
                 }
             }
+
             List<IPayment> creditCard = PaymentMeans.Where(x => x is CreditCard).ToList();
             foreach (IPayment item in creditCard)
             {
@@ -82,9 +109,7 @@ namespace Homework
                 }
             }
             Console.WriteLine("not enough money ");
-            return false;
-
-          
+            return false;          
         }
        
     }
