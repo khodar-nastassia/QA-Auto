@@ -19,7 +19,7 @@ namespace Homework.PaymentCards
         }
         public override string ToString()
         {
-            return "CreditCardPercent = " + CreditCardPercent + ", CreditCarDLimit = " + CreditCardLimit;
+            return "CreditCardNumber = " + CardNumber + ", CreditCardPercent = " + CreditCardPercent + ", CreditCarDLimit = " + CreditCardLimit;
         }
         public string GetFullInformation()
         {

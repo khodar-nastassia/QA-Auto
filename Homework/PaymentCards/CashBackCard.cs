@@ -19,7 +19,7 @@ namespace Homework.PaymentCards
 
         public override string ToString()
         {
-            return "CashBackCardPercent = " + CashBackCardPercent + ", CashBackCardBalance = " + CashBackCardBalance;
+            return "CashBackCardNumber = " + CardNumber + ", CashBackCardPercent = " + CashBackCardPercent + ", CashBackCardBalance = " + CashBackCardBalance;
         }
         public string GetFullInformation()
         {

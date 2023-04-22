@@ -12,5 +12,7 @@ namespace Homework
         float TopUp(float amount);
         bool CheckBalanceSufficiency(float amount);
         float GetBalance();
+        string ToString();
+
     }
 }

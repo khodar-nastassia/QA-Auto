@@ -26,7 +26,7 @@ namespace Homework
             {
                 return new AdressCityComparer();
             }
-            else if (comparer == "Amount")
+            else if (comparer == "Amount of cards")
             {
                 return new AmountCardsCompare();
             }

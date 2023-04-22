@@ -15,7 +15,7 @@ namespace Homework.PaymentCards
         }
         public override string ToString()
         {
-            return "DebetCardBalance = " + DebetCardBalance;
+            return "DebetCardNumber = " + CardNumber + ", DebetCardBalance = " + DebetCardBalance;
         }
         public string GetFullInformation()
         {
