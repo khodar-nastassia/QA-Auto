@@ -1,40 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Homework.PaymentMeans;
 
-namespace Homework.PaymentMeans
+public class BitCoin: PaymentMean
 {
-    internal class BitCoin : IPayment
+    public long BitCoinHash {get; private set; }
+
+    public BitCoin(float bitCoinBalance): base(bitCoinBalance)
     {
-        public float BitCoinBalance { get; private set; }
-        public BitCoin BitCoinHash { get; private set; }
-        public BitCoin(float bitCoinBalance)
+    }
+
+    public override float MakePayment(float amount)
+    {
+        Balance -= amount;
+        return Balance;
+    }
+
+    public override float TopUp(float amount)
+    {
+        Balance += amount;
+        return Balance;
+    }
+
+    public override string ToString() => "BitCoin balance is " + Balance;
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is BitCoin bitCoin)
         {
-            BitCoinBalance = bitCoinBalance;
+            return bitCoin.Balance == Balance;
         }
-        public bool CheckBalanceSufficiency(float amount)
-        {
-            if (BitCoinBalance >= amount)
-            {
-                return true;
-            }
-            return false;
-        }
-        public float MakePayment(float amount)
-        {
-            BitCoinBalance -= amount;
-            return BitCoinBalance;
-        }
-        public float TopUp(float amount)
-        {
-            BitCoinBalance += amount;
-            return BitCoinBalance;
-        }
-        public float GetBalance()
-        {
-            return BitCoinBalance;
-        }
+        return false;
     }
 }

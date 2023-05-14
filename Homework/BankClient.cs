@@ -1,116 +1,111 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
-using Homework.PaymentCards;
-using Homework.PaymentMeans;
-using Homework.Comparer;
+﻿using Homework.PaymentMeans;
+using Homework.PaymentMeans.PaymentCards;
 
-namespace Homework
+namespace Homework;
+
+public class BankClient
 {
-    internal class BankClient
-    {
-        public Customer Customer { get; set; }
-        public string ClientInfo { get; set; }
-        public List<IPayment> PaymentMeans { get; set; }        
-        public BankClient(Customer customer, List<IPayment> paymentMeans)
+    private string _clientInfo;
+
+    public Customer Customer { get; set; }
+    public string ClientInfo { 
+        get => _clientInfo;
+        set
         {
-            Customer = customer;
-            PaymentMeans = paymentMeans;
+            if (string.IsNullOrEmpty(value))
+                throw new Exception("ClientInfo cannot be null or empty");
+            _clientInfo = value;
         }
-        public bool AddPaymentMean(IPayment mean)
+    }
+    public List<PaymentMean> PaymentMeans {get ;set;}
+
+    public BankClient(Customer customer, string clientInfo, List<PaymentMean> paymentMeans)
+    {
+        Customer = customer;
+        ClientInfo = clientInfo;
+        PaymentMeans = paymentMeans;
+    }
+
+    public void AddPaymentMean(PaymentMean mean)
+    {
+        if (mean != null)
         {
             PaymentMeans.Add(mean);
-            return true;
-        }        
-        public float GetAllMoney( BankClient client)
-        {
-            float allMoney = 0;
-            foreach (var item in PaymentMeans)               
-            {
-                item.GetBalance();
-                allMoney += item.GetBalance();
-            }
-            return allMoney;           
         }
-        public float GetMaxBalance(BankClient client)
+    }
+
+    public float GetAllMoney()
+    {
+        float allMoney = 0;
+        foreach (var item in PaymentMeans )
         {
-            float maxBalance = 0;
-            foreach (var item in PaymentMeans)
-            {
-                if (item.GetBalance() > maxBalance)
-                {
-                    maxBalance = item.GetBalance();
-                }                
-            }
-            return maxBalance;
+            item.GetBalance();
+            allMoney += item.GetBalance();
         }
+        return allMoney;
+    }
 
-        
-
-        public bool Pay(float amount)
+    public float GetMaxBalance()
+    {
+        float maxBalance = 0;
+        foreach (var item in PaymentMeans)
         {
-            List<IPayment> cash = PaymentMeans.Where(x => x is Cash).ToList();
-            
-            foreach (IPayment item in cash)
+            if (item.GetBalance() > maxBalance)
             {
-                if (item.CheckBalanceSufficiency(amount) == true)
-                {
-                    item.MakePayment(amount);
-                    float test = item.GetBalance();
-                    //Console.WriteLine("pay by cash");
-                    return true;
-                }
+                maxBalance = item.GetBalance();
             }
-
-            List<IPayment> cashBackCard = PaymentMeans.Where(x => x is CashBackCard).ToList();
-
-            foreach (IPayment item in cashBackCard)
-            {
-                if (item.CheckBalanceSufficiency(amount))
-                {
-                    item.MakePayment(amount);
-                    //Console.WriteLine("pay by cashBackCard");
-                    return true;
-                }
-            }
-
-            List<IPayment> debetCard = PaymentMeans.Where(x => x is DebetCard).ToList();
-            foreach (IPayment item in debetCard)
-            {
-                if (item.CheckBalanceSufficiency(amount))
-                {
-                    item.MakePayment(amount);
-                    //Console.WriteLine("pay by debetCard");
-                    return true;
-                }
-            }
-
-            List<IPayment> creditCard = PaymentMeans.Where(x => x is CreditCard).ToList();
-            foreach (IPayment item in creditCard)
-            {
-                if (item.CheckBalanceSufficiency(amount))
-                {
-                    item.MakePayment(amount);
-                    //Console.WriteLine("pay by creditCard");
-                    return true;
-                }
-            }
-            List<IPayment> bitCoin = PaymentMeans.Where(x => x is BitCoin).ToList();
-            foreach (IPayment item in bitCoin)
-            {
-                if (item.CheckBalanceSufficiency(amount))
-                {
-                    item.MakePayment(amount);
-                    //Console.WriteLine("pay by bitCoin");
-                    return true;
-                }
-            }
-            Console.WriteLine("not enough money ");
-            return false;          
         }
-       
+        return maxBalance;
+    }
+
+    public bool Pay(float amount)
+    {
+        List<Type> types = new List<Type>
+        {
+            typeof(Cash),
+            typeof(CashBackCard),
+            typeof(DebitCard),
+            typeof(CreditCard),
+            typeof(BitCoin)
+        };
+
+        foreach (var type in types)
+        {
+            var list = PaymentMeans.Where(x => x.GetType() == type).ToList(); //create list of type
+            if (TryPay(list, amount))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static bool TryPay(List<PaymentMean> list, float amount)
+    {
+        foreach (PaymentMean item in list)
+        {
+            if (item.CheckBalanceSufficiency(amount))
+            {
+                item.MakePayment(amount);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public override string ToString()
+    {
+        return Customer.LastName + "- " + PaymentMeans.Count;
+    }
+
+    // Клиенты считаются равными, есть совпадают их имена, адреса и общее количество денег на всех счетах
+    public override bool Equals(object? obj)
+    {
+        if (obj is BankClient client)
+        {
+            return client.Customer == Customer &&
+                   client.GetAllMoney() == GetAllMoney();
+        }
+        return false;
     }
 }

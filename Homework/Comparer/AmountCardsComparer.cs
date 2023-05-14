@@ -1,10 +1,11 @@
 ﻿namespace Homework.Comparer;
 
-internal class TotalBalanceComparer : IComparer<BankClient>
+internal class AmountCardsComparer : IComparer<BankClient>
 {
     public int Compare(BankClient? x, BankClient? y)
     {
         Helper.CheckData(x, y);
-        return x.GetAllMoney().CompareTo(y.GetAllMoney());
+        return x.PaymentMeans.Count.CompareTo(y.PaymentMeans.Count);
     }
 }
+

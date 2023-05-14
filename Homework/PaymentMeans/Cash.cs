@@ -1,47 +1,31 @@
-﻿using Microsoft.Win32.SafeHandles;
-using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Homework.PaymentMeans;
 
-namespace Homework.PaymentMeans
+public class Cash : PaymentMean
 {
-    internal class Cash : IPayment
+    public Cash(float cashBalance) : base(cashBalance)
     {
-        public int BanknoteDenomination { get; set; }
-        public int BanknoteNumber { get; set; }
+    }
 
-        float CashBalance = 0;
+    public override float MakePayment(float amount)
+    {
+        Balance -= amount;
+        return Balance;
+    }
 
-        public Cash(int banknoteDenomination, int banknoteNumber)
+    public override float TopUp(float amount)
+    {
+        Balance += amount;
+        return Balance;
+    }
+
+    public override string ToString() => "Cash balance is " + Balance;
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is Cash cash)
         {
-            BanknoteDenomination = banknoteDenomination;
-            BanknoteNumber = banknoteNumber;
+            return cash.Balance == Balance;
         }
-        public void CountCashBalance()
-        {
-            CashBalance = BanknoteDenomination * BanknoteNumber;
-        }
-        public bool CheckBalanceSufficiency(float amount)
-        {
-            CountCashBalance();
-            return CashBalance >= amount;
-        }
-        public float MakePayment(float amount)
-        {
-            CashBalance -= amount;
-            return CashBalance;
-        }
-        public float TopUp(float amount)
-        {
-            CashBalance += amount;
-            return CashBalance;
-        }
-        public float GetBalance()
-        {
-            return CashBalance;
-        }
+        return false;
     }
 }

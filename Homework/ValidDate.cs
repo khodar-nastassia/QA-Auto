@@ -1,27 +1,31 @@
-﻿using Microsoft.VisualBasic;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Homework.Exceptions;
 
-namespace Homework
+namespace Homework;
+
+public class ValidDate
 {
-    internal class ValidDate
+    public int Year { get; private set; }
+    public int Month { get; private set; }
+
+    public ValidDate(int month, int year)
     {
-        public int Year { get; set; }
-        public int Month { get; set; }
-
-        public ValidDate(int year, int month)
+        if (year <= 0 || (month <= 0 || month >= 13))
         {
-            Year = year;
-            Month = month;
+            throw new WrongDate("Wrong parametrs in ValidDate");
         }
-        public override string ToString()
+        Year = year;
+        Month = month;
+    }
+
+    public override string ToString() => Month + "/" + Year;
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is ValidDate date)
         {
-            return Month + "/" + Year;
-
+            return date.Month == Month &&
+                   date.Year == Year;
         }
-
+        return false;
     }
 }
